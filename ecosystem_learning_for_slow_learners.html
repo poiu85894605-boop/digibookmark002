@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>평화로운 숲속 생태계 모험</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Gaegu & Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            300: '#86efac',
+                            500: '#22c55e',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        warmyellow: '#fef08a',
+                        softamber: '#fef3c7',
+                    },
+                    fontFamily: {
+                        gaegu: ['Gaegu', 'cursive'],
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4fbf7;
+            user-select: none;
+        }
+        .font-friendly {
+            font-family: 'Gaegu', cursive;
+        }
+        .pulse-gentle {
+            animation: pulseGentle 2s infinite ease-in-out;
+        }
+        @keyframes pulseGentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .bounce-soft {
+            animation: bounceSoft 1.5s infinite;
+        }
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        /* High accessibility text sizing */
+        .text-size-normal { font-size: 1rem; }
+        .text-size-large { font-size: 1.18rem; }
+        .text-size-xlarge { font-size: 1.35rem; }
+
+        .quiz-slot {
+            transition: all 0.2s ease;
+        }
+        .quiz-slot.highlight {
+            border-color: #22c55e;
+            background-color: #dcfce7;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+    <!-- Top Header -->
+    <header class="bg-emerald-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🌲</span>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">평화로운 숲속 생태계 탐험</h1>
+                    <p class="text-xs sm:text-sm text-emerald-100 font-medium">누가 살고 있을까? 느린학습자 맞춤 탐험</p>
+                </div>
+            </div>
+
+            <!-- Accessibility Toolbar -->
+            <div class="flex items-center space-x-2 bg-emerald-700/60 p-1.5 rounded-2xl text-xs sm:text-sm">
+                <span class="text-emerald-100 font-bold hidden sm:inline ml-1"><i class="fa-solid fa-text-height mr-1"></i>글자 크기</span>
+                <button onclick="changeFontSize('normal')" id="btn-size-normal" class="px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 font-bold transition">기본</button>
+                <button onclick="changeFontSize('large')" id="btn-size-large" class="px-2.5 py-1 rounded-xl bg-emerald-900 text-white font-bold transition">크게</button>
+                <button onclick="changeFontSize('xlarge')" id="btn-size-xlarge" class="px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 font-bold transition">더크게</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="app-container" class="max-w-5xl mx-auto px-4 py-6 text-size-large flex-grow w-full">
+
+        <!-- Progress and Rewards Banner -->
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-3xl p-4 mb-6 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-amber-400 text-amber-900 flex items-center justify-center text-2xl font-bold shadow-sm">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-amber-900 text-lg">칭찬 스탬프 모으기</h2>
+                    <p class="text-sm text-amber-700">활동을 하나씩 끝낼 때마다 참 잘했어요 스탬프를 받아요!</p>
+                </div>
+            </div>
+            <div class="flex space-x-3 bg-white px-4 py-2 rounded-2xl border border-amber-200 shadow-inner">
+                <div id="stamp-1" class="flex flex-col items-center opacity-30 transition">
+                    <span class="text-2xl">🌿</span>
+                    <span class="text-xs font-bold text-slate-600">1단계</span>
+                </div>
+                <div id="stamp-2" class="flex flex-col items-center opacity-30 transition">
+                    <span class="text-2xl">✏️</span>
+                    <span class="text-xs font-bold text-slate-600">2단계</span>
+                </div>
+                <div id="stamp-3" class="flex flex-col items-center opacity-30 transition">
+                    <span class="text-2xl">🦊</span>
+                    <span class="text-xs font-bold text-slate-600">3단계</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex border-b-2 border-emerald-200 mb-6 gap-2 overflow-x-auto pb-1">
+            <button onclick="switchTab('tab-concept')" id="nav-tab-concept" class="tab-btn px-5 py-3 rounded-t-2xl font-bold text-emerald-800 bg-emerald-100 border-t-2 border-x-2 border-emerald-300 flex items-center space-x-2 whitespace-nowrap shadow-sm">
+                <span class="text-xl">1️⃣</span>
+                <span>핵심 내용 파악하기</span>
+            </button>
+            <button onclick="switchTab('tab-quiz')" id="nav-tab-quiz" class="tab-btn px-5 py-3 rounded-t-2xl font-bold text-slate-600 hover:bg-slate-100 border-t-2 border-x-2 border-transparent flex items-center space-x-2 whitespace-nowrap">
+                <span class="text-xl">2️⃣</span>
+                <span>빈칸 채우기 핵심단어</span>
+            </button>
+            <button onclick="switchTab('tab-game')" id="nav-tab-game" class="tab-btn px-5 py-3 rounded-t-2xl font-bold text-slate-600 hover:bg-slate-100 border-t-2 border-x-2 border-transparent flex items-center space-x-2 whitespace-nowrap">
+                <span class="text-xl">3️⃣</span>
+                <span>나만의 숲 만들기</span>
+            </button>
+        </nav>
+
+        <!-- TAB 1: 핵심 내용 파악하기 -->
+        <section id="tab-concept" class="tab-content block space-y-6">
+            <!-- Video Reference Banner -->
+            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-3xl p-5 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="inline-block bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-2">영상 복습</span>
+                        <h3 class="font-bold text-xl text-emerald-900 mb-1">🎬 차근차근 영상과 함께 배워요!</h3>
+                        <p class="text-emerald-800 text-sm">클래스로그 초등 과학 [생물과 환경] 영상 핵심 내용을 쉽게 정리했습니다.</p>
+                    </div>
+                    <button onclick="speakText('차근차근 영상과 함께 생태계를 배워봅시다!')" class="bg-emerald-200 hover:bg-emerald-300 text-emerald-900 p-2.5 rounded-2xl transition flex items-center space-x-1 font-bold text-sm shrink-0">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                        <span class="hidden sm:inline">듣기</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Concept Card 1: 생태계란? -->
+            <div class="bg-white rounded-3xl border-2 border-slate-200 p-6 shadow-sm hover:border-emerald-400 transition">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
+                        <span>🏡</span> 1. 생태계(Ecosystem)란 무엇일까요?
+                    </h3>
+                    <button onclick="speakText('생태계란 무엇일까요? 살아있는 생물과, 생물이 살아가는 환경이 서로 도움을 주고받으며 어울려 사는 세상을 말해요.')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1.5 rounded-2xl transition font-bold text-sm flex items-center gap-1">
+                        <i class="fa-solid fa-volume-high"></i> 읽어주기
+                    </button>
+                </div>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    살아있는 <strong class="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded">생물</strong>과, 생물이 잘 살 수 있게 도와주는 <strong class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded">환경(비생물)</strong>이 서로 영향을 주고받으며 함께 어울려 살아가는 곳을 <strong class="text-emerald-700 font-extrabold text-xl">생태계</strong>라고 해요!
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 flex items-center space-x-4">
+                        <div class="text-4xl bg-white p-3 rounded-2xl shadow-sm">🌱</div>
+                        <div>
+                            <h4 class="font-bold text-emerald-900">생물 요소</h4>
+                            <p class="text-xs sm:text-sm text-emerald-700">살아있는 모든 것! (식물, 동물, 버섯, 미생물 등)</p>
+                        </div>
+                    </div>
+                    <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 flex items-center space-x-4">
+                        <div class="text-4xl bg-white p-3 rounded-2xl shadow-sm">☀️</div>
+                        <div>
+                            <h4 class="font-bold text-amber-900">비생물 요소</h4>
+                            <p class="text-xs sm:text-sm text-amber-700">살아있지 않지만 꼭 필요한 환경! (햇빛, 물, 공기, 흙, 온도)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concept Card 2: 생물 친구들의 역할 (생산자, 소비자, 분해자) -->
+            <div class="bg-white rounded-3xl border-2 border-slate-200 p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
+                        <span>🎭</span> 2. 숲속 생물 친구들의 3가지 역할
+                    </h3>
+                    <button onclick="speakText('숲속 생물 친구들은 역할에 따라 생산자, 소비자, 분해자로 나뉘어요! 소비자는 풀을 먹는 초식동물과 다른 동물을 먹는 육식동물이 있어요.')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1.5 rounded-2xl transition font-bold text-sm flex items-center gap-1">
+                        <i class="fa-solid fa-volume-high"></i> 읽어주기
+                    </button>
+                </div>
+                <p class="text-slate-700 mb-6">생물들은 어떻게 먹이를 얻는지에 따라 3개의 모둠으로 나눌 수 있어요.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 생산자 -->
+                    <div class="bg-emerald-50 border-2 border-emerald-300 rounded-3xl p-5 hover:shadow-md transition text-center flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl my-2">🌲🌸</div>
+                            <h4 class="text-xl font-bold text-emerald-900 mb-2">1) 생산자</h4>
+                            <p class="text-sm text-emerald-800 leading-relaxed mb-3">
+                                햇빛과 물을 이용해 <strong class="underline decoration-emerald-400">스스로 양분을 만드는</strong> 생물이에요.
+                            </p>
+                        </div>
+                        <div class="bg-white rounded-2xl p-2 border border-emerald-200 font-bold text-emerald-700 text-sm">
+                            예: 나무, 풀, 꽃, 이끼
+                        </div>
+                    </div>
+
+                    <!-- 소비자 -->
+                    <div class="bg-blue-50 border-2 border-blue-300 rounded-3xl p-5 hover:shadow-md transition text-center flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl my-2">🐰🦊</div>
+                            <h4 class="text-xl font-bold text-blue-900 mb-2">2) 소비자</h4>
+                            <p class="text-sm text-blue-800 leading-relaxed mb-2">
+                                스스로 양분을 못 만들어서 <strong class="underline decoration-blue-400">다른 생물을 먹는</strong> 생물이에요.
+                            </p>
+
+                            <!-- 초식동물 / 육식동물 세부 설명 카드 -->
+                            <div class="space-y-2 my-3 text-left">
+                                <div class="bg-white/90 p-2.5 rounded-2xl border border-emerald-200 shadow-sm">
+                                    <div class="font-bold text-emerald-800 text-xs sm:text-sm flex items-center gap-1">
+                                        <span>🥬</span> 초식동물
+                                    </div>
+                                    <p class="text-xs text-slate-700 mt-0.5">
+                                        풀, 열매, 나뭇잎을 먹어요.<br>
+                                        <span class="text-emerald-700 font-bold">(예: 토끼, 사슴, 다람쥐)</span>
+                                    </p>
+                                </div>
+                                <div class="bg-white/90 p-2.5 rounded-2xl border border-rose-200 shadow-sm">
+                                    <div class="font-bold text-rose-800 text-xs sm:text-sm flex items-center gap-1">
+                                        <span>🥩</span> 육식동물
+                                    </div>
+                                    <p class="text-xs text-slate-700 mt-0.5">
+                                        다른 동물을 잡아먹어요.<br>
+                                        <span class="text-rose-700 font-bold">(예: 여우, 호랑이, 매)</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-2 border border-blue-200 font-bold text-blue-800 text-xs sm:text-sm">
+                            💡 무엇을 먹느냐에 따라 나뉘어요!
+                        </div>
+                    </div>
+
+                    <!-- 분해자 -->
+                    <div class="bg-orange-50 border-2 border-orange-300 rounded-3xl p-5 hover:shadow-md transition text-center flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl my-2">🍄🧫</div>
+                            <h4 class="text-xl font-bold text-orange-900 mb-2">3) 분해자</h4>
+                            <p class="text-sm text-orange-800 leading-relaxed mb-3">
+                                죽은 생물이나 똥을 <strong class="underline decoration-orange-400">깨끗하게 썩혀 분해하는</strong> 도우미예요.
+                            </p>
+                        </div>
+                        <div class="bg-white rounded-2xl p-2 border border-orange-200 font-bold text-orange-700 text-sm">
+                            예: 버섯, 곰팡이, 세균
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completion Button for Tab 1 -->
+            <div class="text-center pt-4">
+                <button onclick="completeStep(1)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg px-8 py-4 rounded-3xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 pulse-gentle">
+                    <i class="fa-solid fa-check-circle mr-2"></i> 1단계 공부 완료! 퀴즈 풀러 가기 ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 2: 빈칸 채우기 핵심단어 -->
+        <section id="tab-quiz" class="tab-content hidden space-y-6">
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-3xl p-5">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-amber-900">✏️ 핵심 단어로 빈칸을 완성해 보세요!</h3>
+                        <p class="text-amber-800 text-sm mt-1">알맞은 단어 카드를 클릭하여 빈칸에 채워넣으세요. (문제가 풀어볼 때마다 랜덤으로 섞여요!)</p>
+                    </div>
+                    <button onclick="resetQuiz(true)" class="bg-white hover:bg-amber-100 text-amber-800 border border-amber-300 px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm hover:scale-105">
+                        <i class="fa-solid fa-shuffle text-amber-600"></i> 문제 섞기 / 다시하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Word Bank -->
+            <div class="bg-slate-100 border-2 border-slate-300 rounded-3xl p-4 shadow-inner">
+                <h4 class="text-sm font-bold text-slate-600 mb-3 text-center">👇 아래 알맞은 단어를 선택하세요</h4>
+                <div id="word-bank" class="flex flex-wrap justify-center gap-3">
+                    <!-- Word chips generated by JS -->
+                </div>
+            </div>
+
+            <!-- Questions List (Dynamically Generated) -->
+            <div class="space-y-4" id="quiz-list">
+                <!-- Dynamic quiz cards rendered by JavaScript -->
+            </div>
+
+            <!-- Check Quiz Result Button -->
+            <div class="text-center pt-4">
+                <button onclick="checkQuizResults()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg px-8 py-4 rounded-3xl shadow-lg transition transform hover:-translate-y-1">
+                    <i class="fa-solid fa-star mr-2"></i> 정답 확인하기!
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 3: 나만의 숲 만들기 -->
+        <section id="tab-game" class="tab-content hidden space-y-6">
+            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-3xl p-5">
+                <h3 class="text-xl font-bold text-emerald-900">🦊 나만의 평화로운 숲 생태계 만들기</h3>
+                <p class="text-emerald-800 text-sm mt-1">생물 요소와 비생물 요소를 하나씩 눌러 숲에 데려와 보세요!</p>
+            </div>
+
+            <!-- Interactive Forest Canvas Container -->
+            <div class="relative bg-gradient-to-b from-sky-200 via-emerald-100 to-amber-100 border-4 border-emerald-500 rounded-3xl h-80 sm:h-96 overflow-hidden shadow-inner flex flex-col justify-between p-4" id="forest-canvas">
+                <!-- Sky area (Sun, Air) -->
+                <div class="flex justify-between items-start">
+                    <div id="element-sun" class="opacity-10 transition-all duration-700 transform scale-75 flex flex-col items-center">
+                        <span class="text-5xl drop-shadow-md">☀️</span>
+                        <span class="bg-white/80 px-2 py-0.5 rounded-full text-xs font-bold text-amber-800">햇빛</span>
+                    </div>
+                    <div id="element-cloud" class="opacity-10 transition-all duration-700 transform scale-75 flex flex-col items-center">
+                        <span class="text-5xl drop-shadow-md">🌧️</span>
+                        <span class="bg-white/80 px-2 py-0.5 rounded-full text-xs font-bold text-blue-800">물과 공기</span>
+                    </div>
+                </div>
+
+                <!-- Middle area (Trees, Animals) -->
+                <div class="flex justify-around items-end mb-4">
+                    <div id="element-tree" class="opacity-10 transition-all duration-700 transform translate-y-4 flex flex-col items-center">
+                        <span class="text-6xl drop-shadow-md">🌲</span>
+                        <span class="bg-white/80 px-2 py-0.5 rounded-full text-xs font-bold text-emerald-900">생산자 (나무)</span>
+                    </div>
+                    <div id="element-rabbit" class="opacity-10 transition-all duration-700 transform translate-y-4 flex flex-col items-center">
+                        <span class="text-5xl drop-shadow-md">🐰</span>
+                        <span class="bg-white/80 px-2 py-0.5 rounded-full text-xs font-bold text-blue-900">소비자 (토끼)</span>
+                    </div>
+                    <div id="element-mushroom" class="opacity-10 transition-all duration-700 transform translate-y-4 flex flex-col items-center">
+                        <span class="text-5xl drop-shadow-md">🍄</span>
+                        <span class="bg-white/80 px-2 py-0.5 rounded-full text-xs font-bold text-orange-900">분해자 (버섯)</span>
+                    </div>
+                </div>
+
+                <!-- Soil area -->
+                <div id="element-soil" class="opacity-20 transition-all duration-700 bg-amber-800/20 border-t-2 border-amber-900/30 rounded-xl p-2 text-center text-xs font-bold text-amber-900">
+                    🪨 비생물 요소: 비옥한 흙과 바위
+                </div>
+            </div>
+
+            <!-- Item selection palette -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                <button onclick="toggleForestElement('sun')" class="bg-white hover:bg-amber-50 border-2 border-amber-300 p-3 rounded-2xl flex flex-col items-center space-y-1 transition shadow-sm">
+                    <span class="text-3xl">☀️</span>
+                    <span class="font-bold text-sm text-amber-900">1. 햇빛 추가</span>
+                </button>
+                <button onclick="toggleForestElement('cloud')" class="bg-white hover:bg-blue-50 border-2 border-blue-300 p-3 rounded-2xl flex flex-col items-center space-y-1 transition shadow-sm">
+                    <span class="text-3xl">🌧️</span>
+                    <span class="font-bold text-sm text-blue-900">2. 비와 공기</span>
+                </button>
+                <button onclick="toggleForestElement('tree')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-300 p-3 rounded-2xl flex flex-col items-center space-y-1 transition shadow-sm">
+                    <span class="text-3xl">🌲</span>
+                    <span class="font-bold text-sm text-emerald-900">3. 생산자 (나무)</span>
+                </button>
+                <button onclick="toggleForestElement('rabbit')" class="bg-white hover:bg-indigo-50 border-2 border-indigo-300 p-3 rounded-2xl flex flex-col items-center space-y-1 transition shadow-sm">
+                    <span class="text-3xl">🐰</span>
+                    <span class="font-bold text-sm text-indigo-900">4. 소비자 (토끼)</span>
+                </button>
+                <button onclick="toggleForestElement('mushroom')" class="bg-white hover:bg-orange-50 border-2 border-orange-300 p-3 rounded-2xl flex flex-col items-center space-y-1 transition shadow-sm">
+                    <span class="text-3xl">🍄</span>
+                    <span class="font-bold text-sm text-orange-900">5. 분해자 (버섯)</span>
+                </button>
+            </div>
+
+            <!-- Ecosystem Status Box -->
+            <div id="ecosystem-msg" class="bg-white border-2 border-emerald-300 rounded-3xl p-5 text-center shadow-sm font-bold text-emerald-900">
+                🌱 아래 버튼들을 하나씩 눌러서 숲을 채워보세요!
+            </div>
+        </section>
+    </main>
+
+    <!-- Praise Modal Dialog -->
+    <div id="praise-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white border-4 border-amber-400 rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl transform scale-95 transition-all">
+            <div class="text-6xl animate-bounce">🎉</div>
+            <h3 id="modal-title" class="text-2xl font-extrabold text-amber-900">참 잘했어요!</h3>
+            <p id="modal-desc" class="text-slate-700 leading-relaxed font-medium">
+                생태계 친구들에 대해 완벽하게 배웠어요!
+            </p>
+            <button onclick="closeModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-2xl shadow transition text-lg">
+                최고예요! 👍
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-emerald-900 text-emerald-200 py-4 text-center text-xs sm:text-sm mt-12">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>🌲 초등 과학 생물과 환경 - 느린학습자 맞춤형 생태계 배움터</p>
+            <p class="text-emerald-400">함께 천천히 배워요 🌱</p>
+        </div>
+    </footer>
+
+    <script>
+        /* Quiz Master Data & State Variables */
+        const masterQuizData = [
+            {
+                id: 1,
+                answer: "생태계",
+                textBefore: "살아있는 생물과 비생물 환경이 영향을 주고받으며 함께 사는 세상을",
+                textAfter: "(이)라고 해요.",
+                ttsText: "살아있는 생물과 비생물 환경이 영향을 주고받으며 함께 사는 세상을 무엇이라고 할까요?",
+                hint: "힌트: 살아있는 생물과 비생물이 함께 어울려 사는 세상을 '생태계'라고 해요."
+            },
+            {
+                id: 2,
+                answer: "생산자",
+                textBefore: "나무나 풀처럼 햇빛을 받아 스스로 양분을 만드는 생물은",
+                textAfter: "(이)라고 해요.",
+                ttsText: "나무나 풀처럼 햇빛을 받아 스스로 양분을 만드는 생물은 무엇일까요?",
+                hint: "힌트: 나무와 풀처럼 스스로 양분을 만드는 생물은 '생산자'예요."
+            },
+            {
+                id: 3,
+                answer: "소비자",
+                textBefore: "토끼나 다람쥐처럼 다른 생물을 먹어서 양분을 얻는 생물은",
+                textAfter: "(이)라고 해요.",
+                ttsText: "토끼나 다람쥐처럼 다른 생물을 먹어서 양분을 얻는 생물은 무엇일까요?",
+                hint: "힌트: 토끼나 다람쥐처럼 다른 생물을 먹는 동물은 '소비자'예요."
+            },
+            {
+                id: 4,
+                answer: "분해자",
+                textBefore: "버섯이나 곰팡이처럼 죽은 생물을 깨끗하게 분해해 주는 생물은",
+                textAfter: "(이)라고 해요.",
+                ttsText: "버섯이나 곰팡이처럼 죽은 생물을 깨끗하게 분해해 주는 생물은 무엇일까요?",
+                hint: "힌트: 버섯이나 곰팡이처럼 죽은 것을 깨끗하게 해주는 생물은 '분해자'예요."
+            },
+            {
+                id: 5,
+                answer: "비생물",
+                textBefore: "햇빛, 물, 공기, 흙처럼 살아있지 않지만 꼭 필요한 환경은",
+                textAfter: "요소라고 해요.",
+                ttsText: "햇빛, 물, 공기, 흙처럼 살아있지 않지만 꼭 필요한 환경은 무슨 요소라고 할까요?",
+                hint: "힌트: 햇빛, 물, 흙처럼 살아있지 않은 환경은 '비생물' 요소예요."
+            }
+        ];
+
+        let currentQuizQuestions = [];
+        let wordList = [];
+        let userQuizState = [null, null, null, null, null];
+        let selectedWord = null;
+        let stampsEarned = [false, false, false];
+
+        /* Forest Game Elements State */
+        const forestState = {
+            sun: false,
+            cloud: false,
+            tree: false,
+            rabbit: false,
+            mushroom: false
+        };
+
+        window.onload = function() {
+            initQuiz();
+        };
+
+        function initQuiz() {
+            // Fisher-Yates shuffle algorithm for questions
+            currentQuizQuestions = [...masterQuizData];
+            for (let i = currentQuizQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentQuizQuestions[i], currentQuizQuestions[j]] = [currentQuizQuestions[j], currentQuizQuestions[i]];
+            }
+
+            // Word list contains all possible answers, randomized as well
+            wordList = currentQuizQuestions.map(q => q.answer);
+            for (let i = wordList.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [wordList[i], wordList[j]] = [wordList[j], wordList[i]];
+            }
+
+            userQuizState = [null, null, null, null, null];
+            selectedWord = null;
+
+            renderQuizCards();
+            renderWordBank();
+            updateQuizUI();
+        }
+
+        function renderQuizCards() {
+            const listEl = document.getElementById('quiz-list');
+            if (!listEl) return;
+            listEl.innerHTML = '';
+
+            currentQuizQuestions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:border-amber-300 transition";
+                
+                const safeTtsText = q.ttsText.replace(/'/g, "\\'");
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <p class="text-lg font-medium text-slate-800 leading-relaxed">
+                            <span class="font-bold text-amber-800 mr-1">${idx + 1}.</span> 
+                            ${q.textBefore} 
+                            <span data-quiz-index="${idx}" onclick="clearAnswer(${idx})" class="quiz-slot inline-block min-w-[120px] text-center border-b-4 border-emerald-500 bg-slate-50 px-3 py-1 mx-1 font-bold text-emerald-700 cursor-pointer rounded-t-lg transition">
+                                (   ?   )
+                            </span>
+                            ${q.textAfter}
+                        </p>
+                    </div>
+                    <div class="flex space-x-2 shrink-0">
+                        <button onclick="speakText('${idx + 1}번 문제: ${safeTtsText}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-2xl text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span class="hidden sm:inline">듣기</span>
+                        </button>
+                        <button onclick="showHint(${idx})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-2 rounded-2xl text-xs font-bold transition">
+                            💡 힌트
+                        </button>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+
+            // Attach slot click listeners
+            document.querySelectorAll('.quiz-slot').forEach(slot => {
+                slot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-quiz-index'));
+                    if (selectedWord) {
+                        userQuizState[index] = selectedWord;
+                        selectedWord = null;
+                        renderWordBank();
+                        updateQuizUI();
+                        playGentleSound(523.25);
+                    }
+                });
+            });
+        }
+
+        // Text To Speech (TTS) Helper
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop any ongoing speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ko-KR';
+                utterance.rate = 0.85; // Slightly slower for slow learners
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("이 브라우저는 음성 읽기 기능을 지원하지 않습니다.");
+            }
+        }
+
+        // Font Size Adjuster
+        function changeFontSize(size) {
+            const container = document.getElementById('app-container');
+            container.classList.remove('text-size-normal', 'text-size-large', 'text-size-xlarge');
+            
+            document.getElementById('btn-size-normal').className = "px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 font-bold transition";
+            document.getElementById('btn-size-large').className = "px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 font-bold transition";
+            document.getElementById('btn-size-xlarge').className = "px-2.5 py-1 rounded-xl bg-white/20 hover:bg-white/30 font-bold transition";
+
+            if (size === 'normal') {
+                container.classList.add('text-size-normal');
+                document.getElementById('btn-size-normal').className = "px-2.5 py-1 rounded-xl bg-emerald-900 text-white font-bold transition";
+            } else if (size === 'large') {
+                container.classList.add('text-size-large');
+                document.getElementById('btn-size-large').className = "px-2.5 py-1 rounded-xl bg-emerald-900 text-white font-bold transition";
+            } else if (size === 'xlarge') {
+                container.classList.add('text-size-xlarge');
+                document.getElementById('btn-size-xlarge').className = "px-2.5 py-1 rounded-xl bg-emerald-900 text-white font-bold transition";
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-5 py-3 rounded-t-2xl font-bold text-slate-600 hover:bg-slate-100 border-t-2 border-x-2 border-transparent flex items-center space-x-2 whitespace-nowrap";
+            });
+
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.className = "tab-btn px-5 py-3 rounded-t-2xl font-bold text-emerald-800 bg-emerald-100 border-t-2 border-x-2 border-emerald-300 flex items-center space-x-2 whitespace-nowrap shadow-sm";
+        }
+
+        function renderWordBank() {
+            const bankEl = document.getElementById('word-bank');
+            if (!bankEl) return;
+            bankEl.innerHTML = '';
+
+            wordList.forEach(word => {
+                const isUsed = userQuizState.includes(word);
+                const button = document.createElement('button');
+                button.textContent = word;
+                
+                if (isUsed) {
+                    button.className = "px-4 py-2 bg-slate-200 text-slate-400 font-bold rounded-2xl cursor-not-allowed border border-slate-300";
+                    button.disabled = true;
+                } else if (selectedWord === word) {
+                    button.className = "px-5 py-2.5 bg-amber-400 text-amber-950 font-extrabold rounded-2xl shadow-md border-2 border-amber-600 scale-105 transition transform";
+                } else {
+                    button.className = "px-4 py-2 bg-white hover:bg-amber-100 text-amber-900 font-bold rounded-2xl shadow border-2 border-amber-300 transition transform hover:-translate-y-0.5";
+                    button.onclick = () => selectWord(word);
+                }
+
+                bankEl.appendChild(button);
+            });
+        }
+
+        function selectWord(word) {
+            selectedWord = word;
+            speakText(word);
+            renderWordBank();
+
+            // Highlight empty slots
+            document.querySelectorAll('.quiz-slot').forEach((slot, index) => {
+                if (!userQuizState[index]) {
+                    slot.classList.add('highlight');
+                }
+            });
+        }
+
+        function clearAnswer(index) {
+            if (userQuizState[index]) {
+                userQuizState[index] = null;
+                renderWordBank();
+                updateQuizUI();
+            }
+        }
+
+        function updateQuizUI() {
+            document.querySelectorAll('.quiz-slot').forEach((slot, index) => {
+                slot.classList.remove('highlight');
+                if (userQuizState[index]) {
+                    slot.textContent = userQuizState[index];
+                    slot.className = "quiz-slot inline-block min-w-[120px] text-center border-b-4 border-amber-500 bg-amber-100 px-3 py-1 mx-1 font-bold text-amber-900 cursor-pointer rounded-t-lg shadow-inner";
+                } else {
+                    slot.textContent = "(   ?   )";
+                    slot.className = "quiz-slot inline-block min-w-[120px] text-center border-b-4 border-emerald-500 bg-slate-50 px-3 py-1 mx-1 font-bold text-emerald-700 cursor-pointer rounded-t-lg";
+                }
+            });
+        }
+
+        function resetQuiz(userRequested = false) {
+            initQuiz();
+            if (userRequested) {
+                speakText("문제를 새롭게 다시 섞었어요! 차근차근 풀어보세요.");
+            }
+        }
+
+        function showHint(index) {
+            if (currentQuizQuestions[index]) {
+                const hintText = currentQuizQuestions[index].hint;
+                speakText(hintText);
+                openModal("💡 힌트 보기", hintText);
+            }
+        }
+
+        function checkQuizResults() {
+            let correctCount = 0;
+            userQuizState.forEach((val, idx) => {
+                if (val === currentQuizQuestions[idx].answer) {
+                    correctCount++;
+                }
+            });
+
+            if (correctCount === 5) {
+                playSuccessSound();
+                completeStep(2);
+                openModal("🎉 정답입니다!", "모든 핵심 단어를 완벽하게 맞추셨어요! 대단해요!");
+                speakText("정말 잘했어요! 모든 문제를 맞춰서 스탬프를 받았어요!");
+            } else {
+                openModal("👍 조금 더 해볼까요?", `5문제 중 ${correctCount}문제를 맞췄어요! 차근차근 다시 맞춰봐요. 괜찮아요!`);
+                speakText(`5문제 중 ${correctCount}문제를 맞췄어요. 다시 한번 도전해 볼까요?`);
+            }
+        }
+
+        function toggleForestElement(type) {
+            forestState[type] = !forestState[type];
+            const el = document.getElementById('element-' + type);
+
+            if (forestState[type]) {
+                el.classList.remove('opacity-10', 'translate-y-4', 'scale-75');
+                el.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+                playGentleSound(659.25);
+            } else {
+                el.classList.add('opacity-10');
+                if (type === 'sun' || type === 'cloud') {
+                    el.classList.add('scale-75');
+                } else {
+                    el.classList.add('translate-y-4');
+                }
+            }
+
+            evaluateForestState();
+        }
+
+        function evaluateForestState() {
+            const activeCount = Object.values(forestState).filter(Boolean).length;
+            const msgEl = document.getElementById('ecosystem-msg');
+
+            if (activeCount === 0) {
+                msgEl.textContent = "🌱 버튼들을 하나씩 눌러서 숲을 채워보세요!";
+            } else if (activeCount < 3) {
+                msgEl.textContent = "🌿 숲이 조금씩 풍성해지고 있어요!";
+            } else if (activeCount < 5) {
+                msgEl.textContent = "🦊 생물과 환경이 잘 어우러지고 있네요! 더 추가해 볼까요?";
+            } else {
+                msgEl.textContent = "🎉 완성! 햇빛, 물, 생산자, 소비자, 분해자가 모두 어우러진 평화로운 숲이에요!";
+                completeStep(3);
+                playSuccessSound();
+            }
+        }
+
+        // Award Step Completion Stamps
+        function completeStep(stepNum) {
+            stampsEarned[stepNum - 1] = true;
+            const stampEl = document.getElementById(`stamp-${stepNum}`);
+            if (stampEl) {
+                stampEl.classList.remove('opacity-30');
+                stampEl.classList.add('opacity-100', 'scale-110');
+            }
+            if (stepNum === 1) {
+                switchTab('tab-quiz');
+            }
+        }
+
+        // Modal Helpers
+        function openModal(title, desc) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('praise-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('praise-modal').classList.add('hidden');
+        }
+
+        function playGentleSound(freq) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                // Audio context fallback
+            }
+        }
+
+        function playSuccessSound() {
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                setTimeout(() => playGentleSound(freq), idx * 120);
+            });
+        }
+    </script>
+</body>
+</html>
